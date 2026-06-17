@@ -1,0 +1,91 @@
+---
+import { site } from '../data/site';
+const { agent } = site;
+const telDigits = agent.phone.replace(/[^0-9+]/g, '');
+---
+
+<footer class="ft">
+  <div class="container ft__in">
+    <div class="ft__brand">
+      <p class="ft__title">도안자이 센텀리체</p>
+      <p class="ft__sub">대전 유성구 용계동 · 도안신도시 · GS건설 자이</p>
+    </div>
+
+    <div class="ft__contact">
+      <p><strong>분양 상담</strong> {agent.name} {agent.title}</p>
+      <p><a href={`tel:${telDigits}`}>{agent.phone}</a></p>
+      <p class="ft__official">{agent.phoneOfficialLabel} {agent.phoneOfficial}</p>
+    </div>
+  </div>
+
+  <div class="ft__notice container">
+    <p>
+      ※ 본 사이트는 분양 상담을 위한 <strong>개인 홍보물</strong>이며, 공식 홈페이지가 아닙니다.
+      정확한 정보는 GS건설 공식 홈페이지(<a href="https://xi.co.kr/DAX" target="_blank" rel="noopener noreferrer">xi.co.kr/DAX</a>) 및
+      입주자 모집공고를 확인하시기 바랍니다.
+    </p>
+    <p>
+      ※ 게재된 이미지·평면도·조감도는 소비자의 이해를 돕기 위한 것으로 실제와 다를 수 있으며,
+      일부 시설·계획은 변경될 수 있습니다. 분양 조건은 입주자 모집공고를 기준으로 합니다.
+    </p>
+    <p class="ft__copy">© 도안자이 센텀리체 분양 상담. 본 페이지의 콘텐츠 권리는 각 권리자에게 있습니다.</p>
+  </div>
+</footer>
+
+<style>
+  .ft {
+    background: #0f1521;
+    color: rgba(255, 255, 255, 0.78);
+    padding-block: clamp(40px, 6vw, 64px) 28px;
+  }
+  .ft__in {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .ft__title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .ft__sub {
+    margin-top: 6px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.55);
+  }
+  .ft__contact p {
+    font-size: 0.95rem;
+  }
+  .ft__contact a {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .ft__official {
+    margin-top: 6px;
+    font-size: 0.84rem;
+    color: rgba(255, 255, 255, 0.45);
+  }
+  .ft__notice {
+    margin-top: 24px;
+  }
+  .ft__notice p {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: 8px;
+  }
+  .ft__notice a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: underline;
+  }
+  .ft__notice strong {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .ft__copy {
+    margin-top: 14px;
+  }
+</style>

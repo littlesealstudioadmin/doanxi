@@ -1,0 +1,185 @@
+/* ── Pretendard (한글 웹폰트) ── */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css');
+
+:root {
+  /* 컬러 토큰 */
+  --ink: #15171c;
+  --ink-soft: #3d424d;
+  --muted: #767d8a;
+  --line: #e7e9ee;
+  --bg: #ffffff;
+  --bg-alt: #f6f5f2;
+  --navy: #16233f;
+  --navy-soft: #2a3a5c;
+  --accent: #b08d57; /* 프리미엄 골드/브론즈 */
+  --accent-dark: #8a6d3f;
+  --danger: #c0392b;
+
+  /* 타이포 */
+  --font: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
+    'Malgun Gothic', system-ui, sans-serif;
+
+  /* 레이아웃 */
+  --maxw: 1160px;
+  --pad: clamp(20px, 5vw, 64px);
+  --radius: 14px;
+  --shadow: 0 10px 40px rgba(20, 33, 63, 0.08);
+
+  --header-h: 64px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--header-h);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font);
+  color: var(--ink);
+  background: var(--bg);
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* hidden 속성은 어떤 author 스타일(display:flex 등)보다 항상 우선 */
+[hidden] {
+  display: none !important;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+/* ── 공통 레이아웃 ── */
+.container {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+
+.section {
+  padding-block: clamp(56px, 9vw, 120px);
+}
+.section--alt {
+  background: var(--bg-alt);
+}
+.section--dark {
+  background: var(--navy);
+  color: #fff;
+}
+
+/* 섹션 헤더 */
+.sec-head {
+  text-align: center;
+  margin-bottom: clamp(32px, 5vw, 56px);
+}
+.sec-head h2 {
+  font-size: clamp(1.7rem, 4.2vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+.sec-head .lead {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: clamp(0.98rem, 2.4vw, 1.12rem);
+}
+.section--dark .sec-head .lead {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 버튼 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 26px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn--primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn--primary:hover {
+  background: var(--accent-dark);
+}
+.btn--navy {
+  background: var(--navy);
+  color: #fff;
+}
+.btn--navy:hover {
+  background: var(--navy-soft);
+}
+.btn--ghost {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #fff;
+}
+.btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.btn--lg {
+  padding: 17px 36px;
+  font-size: 1.06rem;
+}
+
+/* 유틸 */
+.disclaimer {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-top: 18px;
+  line-height: 1.5;
+}
+.section--dark .disclaimer {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* 등장 애니메이션 */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.is-in {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 모바일 하단 고정 CTA 만큼 본문 여백 확보 */
+@media (max-width: 820px) {
+  body {
+    padding-bottom: 64px;
+  }
+}

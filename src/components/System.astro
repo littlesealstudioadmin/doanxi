@@ -1,0 +1,93 @@
+---
+import { site } from '../data/site';
+import MediaFrame from './MediaFrame.astro';
+const { system } = site;
+---
+
+<section class="section" id="system">
+  <div class="container">
+    <div class="sec-head reveal">
+      <h2>{system.title}</h2>
+      <p class="lead">{system.lead}</p>
+    </div>
+
+    <ul class="sys__grid reveal">
+      {
+        system.items.map((it) => (
+          <li>
+            <h3>{it.title}</h3>
+            <p>{it.desc}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="sys__provided reveal">
+      <h3 class="sys__provided-title">{system.provided.title}</h3>
+      <ul class="sys__provided-items">
+        {system.provided.items.map((it) => <li>{it}</li>)}
+      </ul>
+      <MediaFrame
+        src={system.provided.image}
+        alt="도안자이 센텀리체 기본 제공품목"
+        caption="※ 기본 제공품목 — 참고용이며 동·타입별로 상이할 수 있습니다."
+      />
+      <p class="disclaimer">{system.provided.note}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .sys__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .sys__grid li {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 24px 22px;
+    background: var(--bg-alt);
+  }
+  .sys__grid h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .sys__grid p {
+    margin-top: 8px;
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  .sys__provided {
+    margin-top: clamp(28px, 5vw, 52px);
+    padding-top: clamp(28px, 5vw, 52px);
+    border-top: 1px solid var(--line);
+    text-align: center;
+  }
+  .sys__provided-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 16px;
+  }
+  .sys__provided-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .sys__provided-items li {
+    font-size: 0.92rem;
+    font-weight: 600;
+    background: var(--navy);
+    color: #fff;
+    border-radius: 999px;
+    padding: 8px 16px;
+  }
+  @media (max-width: 900px) {
+    .sys__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

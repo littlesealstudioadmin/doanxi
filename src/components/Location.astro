@@ -1,0 +1,88 @@
+---
+import { site } from '../data/site';
+import MediaFrame from './MediaFrame.astro';
+const { location } = site;
+
+const icons: Record<string, string> = {
+  train: '🚊',
+  school: '🎓',
+  park: '🏟️',
+  store: '🛒',
+};
+---
+
+<section class="section section--alt" id="location">
+  <div class="container">
+    <div class="sec-head reveal">
+      <h2>{location.title}</h2>
+      <p class="lead">{location.lead}</p>
+    </div>
+
+    <ul class="loc__points reveal">
+      {
+        location.points.map((p) => (
+          <li>
+            <span class="loc__icon" aria-hidden="true">{icons[p.icon] ?? '📍'}</span>
+            <h3>{p.title}</h3>
+            <p>{p.desc}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="reveal">
+      <MediaFrame
+        src={location.image}
+        alt="도안자이 센텀리체 위치도"
+        caption="※ 위치도 — 참고용 이미지이며 실제와 다를 수 있습니다."
+      />
+    </div>
+
+    <p class="disclaimer">{location.disclaimer}</p>
+  </div>
+</section>
+
+<style>
+  .loc__points {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .loc__points li {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .loc__points li:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
+  .loc__icon {
+    font-size: 1.9rem;
+    line-height: 1;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .loc__points h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .loc__points p {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  @media (max-width: 820px) {
+    .loc__points {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 460px) {
+    .loc__points {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

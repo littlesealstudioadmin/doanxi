@@ -1,0 +1,74 @@
+---
+import { site } from '../data/site';
+import MediaFrame from './MediaFrame.astro';
+const { premium } = site;
+---
+
+<section class="section section--dark" id="premium">
+  <div class="container">
+    <div class="sec-head reveal">
+      <h2>{premium.title}</h2>
+      <p class="lead">{premium.lead}</p>
+    </div>
+
+    <ul class="prem__grid reveal">
+      {
+        premium.items.map((it) => (
+          <li>
+            <span class="prem__no">{it.no}</span>
+            <h3>{it.title}</h3>
+            <p>{it.desc}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="reveal">
+      <MediaFrame
+        src={premium.image}
+        alt="도안자이 센텀리체 프리미엄"
+        caption="※ 참고용 이미지이며 실제와 다를 수 있습니다."
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .prem__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .prem__grid li {
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: var(--radius);
+    padding: 26px 22px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .prem__no {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+  .prem__grid h3 {
+    margin-top: 8px;
+    font-size: 1.12rem;
+    font-weight: 700;
+  }
+  .prem__grid p {
+    margin-top: 6px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.66);
+  }
+  @media (max-width: 760px) {
+    .prem__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 460px) {
+    .prem__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

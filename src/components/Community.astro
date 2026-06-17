@@ -1,0 +1,75 @@
+---
+import { site } from '../data/site';
+import MediaFrame from './MediaFrame.astro';
+const { community } = site;
+---
+
+<section class="section section--alt" id="community">
+  <div class="container">
+    <div class="sec-head reveal">
+      <h2>{community.title}</h2>
+      <p class="lead">{community.lead}</p>
+    </div>
+
+    <div class="cmt__groups reveal">
+      {
+        community.groups.map((g) => (
+          <div class="cmt__group">
+            <h3>{g.title}</h3>
+            <ul>
+              {g.items.map((it) => <li>{it}</li>)}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="reveal">
+      <MediaFrame
+        src={community.image}
+        alt="도안자이 센텀리체 CLUB XIAN 커뮤니티 안내"
+        caption="※ CLUB XIAN 안내 — 참고용 이미지이며 실제와 다를 수 있습니다."
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .cmt__groups {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+  .cmt__group {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+  .cmt__group h3 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--accent-dark);
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 14px;
+  }
+  .cmt__group ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .cmt__group li {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    background: var(--bg-alt);
+    border-radius: 999px;
+    padding: 7px 14px;
+  }
+  @media (max-width: 760px) {
+    .cmt__groups {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

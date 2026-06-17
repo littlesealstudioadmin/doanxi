@@ -1,0 +1,158 @@
+---
+import { Image } from 'astro:assets';
+import { site } from '../data/site';
+import { img } from '../lib/images';
+const { nav, agent } = site;
+const telHref = `tel:${agent.phone.replace(/[^0-9+]/g, '')}`;
+---
+
+<header class="hdr" id="top">
+  <div class="hdr__in container">
+    <a href="#top" class="hdr__logo" aria-label="도안자이 센텀리체 홈">
+      <Image src={img('logo/header-logo.webp')} alt="도안자이 센텀리체" />
+    </a>
+
+    <nav class="hdr__nav" aria-label="주요 메뉴">
+      {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+    </nav>
+
+    <div class="hdr__cta">
+      <a href={telHref} class="btn btn--primary hdr__call">
+        <span aria-hidden="true">☎</span> 전화상담
+      </a>
+      <button class="hdr__menu" aria-label="메뉴 열기" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- 모바일 드로어 -->
+  <nav class="hdr__drawer" aria-label="모바일 메뉴" hidden>
+    {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+    <a href={telHref} class="hdr__drawer-call">☎ {agent.phone} 전화상담</a>
+  </nav>
+</header>
+
+<style>
+  .hdr {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: saturate(180%) blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .hdr__in {
+    height: var(--header-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .hdr__logo {
+    display: inline-flex;
+    align-items: center;
+  }
+  .hdr__logo img {
+    height: 28px;
+    width: auto;
+    display: block;
+  }
+  .hdr__nav {
+    display: flex;
+    gap: clamp(10px, 1.6vw, 26px);
+    margin-left: auto;
+    margin-right: 8px;
+  }
+  .hdr__nav a {
+    font-size: 0.94rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+    padding: 6px 2px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .hdr__nav a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .hdr__cta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hdr__call {
+    padding: 9px 18px;
+    font-size: 0.92rem;
+  }
+  .hdr__menu {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 6px;
+  }
+  .hdr__menu span {
+    width: 24px;
+    height: 2px;
+    background: var(--navy);
+    transition: 0.2s;
+  }
+  .hdr__drawer {
+    display: none;
+    flex-direction: column;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    padding: 8px var(--pad) 18px;
+  }
+  .hdr__drawer a {
+    padding: 12px 4px;
+    border-bottom: 1px solid var(--line);
+    font-weight: 500;
+  }
+  .hdr__drawer-call {
+    margin-top: 12px;
+    color: var(--accent) !important;
+    font-weight: 700 !important;
+    border: 0 !important;
+  }
+
+  @media (max-width: 980px) {
+    .hdr__nav {
+      display: none;
+    }
+    .hdr__menu {
+      display: flex;
+    }
+    .hdr__drawer.is-open {
+      display: flex;
+    }
+  }
+  @media (max-width: 420px) {
+    .hdr__call span {
+      display: none;
+    }
+    .hdr__logo img {
+      height: 24px;
+    }
+  }
+</style>
+
+<script>
+  const btn = document.querySelector('.hdr__menu');
+  const drawer = document.querySelector('.hdr__drawer');
+  btn?.addEventListener('click', () => {
+    const open = drawer?.classList.toggle('is-open');
+    if (drawer) drawer.hidden = !open;
+    btn.setAttribute('aria-expanded', String(open));
+  });
+  drawer?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      drawer.classList.remove('is-open');
+      drawer.hidden = true;
+      btn?.setAttribute('aria-expanded', 'false');
+    }),
+  );
+</script>

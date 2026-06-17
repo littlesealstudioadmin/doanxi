@@ -1,0 +1,142 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site';
+
+const { meta } = site;
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImageAbs = new URL(meta.ogImage, Astro.site).toString();
+
+// JSON-LD: 분양 단지(Residence) + 영업 담당(RealEstateAgent)
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'ApartmentComplex',
+      name: '도안자이 센텀리체',
+      description: meta.description,
+      numberOfAccommodationUnits: 2293,
+      url: canonical,
+      image: ogImageAbs,
+      address: {
+        '@type': 'PostalAddress',
+        addressRegion: '대전광역시',
+        addressLocality: '유성구 용계동',
+        addressCountry: 'KR',
+      },
+      provider: { '@type': 'Organization', name: 'GS건설' },
+    },
+    {
+      '@type': 'RealEstateAgent',
+      name: `${site.agent.name} 분양상담`,
+      telephone: site.agent.phone,
+      areaServed: '대전광역시 유성구',
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{meta.title}</title>
+    <meta name="description" content={meta.description} />
+    <meta name="keywords" content={meta.keywords} />
+    <link rel="canonical" href={canonical} />
+    <meta name="format-detection" content="telephone=yes" />
+    <meta name="theme-color" content="#16233f" />
+
+    <!-- Open Graph / 카카오·페북·밴드 공유 -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={meta.title} />
+    <meta property="og:description" content={meta.description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageAbs} />
+    <meta property="og:locale" content="ko_KR" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+  </head>
+  <body>
+    <slot />
+
+    <!-- 공용 이미지 라이트박스 (배치도·평면도 등 클릭 확대) -->
+    <div class="lightbox" id="lightbox" hidden>
+      <button class="lightbox__close" type="button" aria-label="닫기">✕</button>
+      <img class="lightbox__img" id="lightbox-img" src="" alt="확대 이미지" />
+    </div>
+    <script>
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
+      const closeLb = () => {
+        if (lb) lb.hidden = true;
+        if (lbImg) lbImg.src = '';
+      };
+      document.addEventListener('click', (e) => {
+        const t = e.target as HTMLElement;
+        const trigger = t.closest('[data-zoom]');
+        if (trigger) {
+          const src = trigger.getAttribute('data-zoom');
+          if (src && lb && lbImg) {
+            lbImg.src = src;
+            lb.hidden = false;
+          }
+        } else if (lb && !lb.hidden && (t === lb || t.classList.contains('lightbox__close'))) {
+          closeLb();
+        }
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLb();
+      });
+    </script>
+    <style>
+      .lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        background: rgba(8, 12, 22, 0.92);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .lightbox__img {
+        max-width: 100%;
+        max-height: 90vh;
+        object-fit: contain;
+        background: #fff;
+        border-radius: 8px;
+      }
+      .lightbox__close {
+        position: absolute;
+        top: 18px;
+        right: 22px;
+        font-size: 1.6rem;
+        line-height: 1;
+        color: #fff;
+        background: none;
+        border: 0;
+        cursor: pointer;
+      }
+    </style>
+
+    <!-- 스크롤 등장 애니메이션 -->
+    <script>
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-in');
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { threshold: 0.12 },
+      );
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

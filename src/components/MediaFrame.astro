@@ -1,0 +1,86 @@
+---
+import { Image } from 'astro:assets';
+import { img } from '../lib/images';
+
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+  zoom?: boolean; // 클릭 시 라이트박스로 확대
+  pad?: boolean; // 흰 프레임 상단 여백(흰 배경 그래픽용). 회색/사진 이미지는 false
+}
+const { src, alt, caption, zoom = false, pad = true } = Astro.props;
+const meta = img(src);
+---
+
+<figure class="mf">
+  <div class={`mf__frame${pad ? ' mf__frame--pad' : ''}`}>
+    {
+      zoom ? (
+        <button class="mf__zoom" type="button" data-zoom={meta.src} aria-label={`${alt} 크게 보기`}>
+          <Image src={meta} alt={alt} widths={[640, 1000, 1440]} sizes="(max-width: 1160px) 100vw, 1100px" />
+          <span class="mf__hint">⤢ 크게 보기</span>
+        </button>
+      ) : (
+        <Image src={meta} alt={alt} widths={[640, 1000, 1440]} sizes="(max-width: 1160px) 100vw, 1100px" />
+      )
+    }
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .mf {
+    margin-top: clamp(22px, 4vw, 40px);
+  }
+  .mf__frame {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #fff;
+    box-shadow: var(--shadow);
+    max-width: 880px;
+    margin-inline: auto;
+  }
+  /* 이미지 자체에 상단 여백이 없는 흰 배경 그래픽: 흰 프레임 여백으로 숨통을 틔움
+     (회색/사진 이미지는 pad=false 로 흰 띠 이음매 방지) */
+  .mf__frame--pad {
+    padding-top: clamp(20px, 3.5vw, 30px);
+  }
+  .mf__zoom {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    background: none;
+    cursor: zoom-in;
+    position: relative;
+  }
+  .mf__hint {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(8, 12, 22, 0.62);
+    border-radius: 999px;
+    padding: 5px 12px;
+    backdrop-filter: blur(3px);
+  }
+  .mf__frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .mf figcaption {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.82rem;
+    margin-top: 12px;
+  }
+  .section--dark .mf figcaption {
+    color: rgba(255, 255, 255, 0.5);
+  }
+</style>
