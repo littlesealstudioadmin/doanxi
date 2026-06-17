@@ -2,8 +2,8 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// 배포 도메인 구매 후 이 값만 바꾸면 됩니다 (SEO/사이트맵/OG 절대경로에 사용)
-const SITE_URL = process.env.SITE_URL || 'https://doanxi-centumriche.example.com';
+// 배포 도메인 (SEO/사이트맵/OG 절대경로에 사용). 커스텀 도메인 확정 시 이 값만 바꾸면 됨
+const SITE_URL = process.env.SITE_URL || 'https://doanxi.littlesealstudio.workers.dev';
 
 // https://astro.build/config
 export default defineConfig({
