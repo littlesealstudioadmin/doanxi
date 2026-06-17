@@ -50,7 +50,10 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
           <input type="checkbox" name="agree" required />
           <span>개인정보 수집·이용에 동의합니다. <small>{leadForm.privacyNote}</small></span>
         </label>
-        <button type="submit" class="btn btn--primary btn--lg lead-form__submit">상담 신청하기</button>
+        <button type="submit" class="btn btn--primary btn--lg lead-form__submit">
+          <span class="lf-spinner" aria-hidden="true"></span>
+          <span class="lf-label">상담 신청하기</span>
+        </button>
         <p class="lead-form__msg" id="lf-msg" role="status" aria-live="polite"></p>
       </form>
     </div>
@@ -158,6 +161,27 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
   .lead-form__submit {
     width: 100%;
   }
+  .lead-form__submit:disabled {
+    opacity: 0.85;
+    cursor: progress;
+  }
+  .lf-spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid rgba(255, 255, 255, 0.45);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: lf-spin 0.7s linear infinite;
+  }
+  .lead-form__submit.is-loading .lf-spinner {
+    display: inline-block;
+  }
+  @keyframes lf-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
   .lead-form__msg {
     margin-top: 12px;
     font-size: 0.9rem;
@@ -181,10 +205,18 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
 <script>
   const form = document.getElementById('leadForm') as HTMLFormElement | null;
   const msg = document.getElementById('lf-msg');
+  const submitBtn = form?.querySelector('.lead-form__submit') as HTMLButtonElement | null;
+  const submitLabel = submitBtn?.querySelector('.lf-label');
   function setMsg(text: string, kind: 'ok' | 'err') {
     if (!msg) return;
     msg.textContent = text;
     msg.className = 'lead-form__msg ' + kind;
+  }
+  function setLoading(on: boolean) {
+    if (!submitBtn) return;
+    submitBtn.classList.toggle('is-loading', on);
+    submitBtn.disabled = on;
+    if (submitLabel) submitLabel.textContent = on ? '전송 중…' : '상담 신청하기';
   }
 
   form?.addEventListener('submit', async (e) => {
@@ -199,8 +231,9 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
     const interest = String(data.get('interest') || '');
 
     if (endpoint) {
+      setLoading(true);
+      setMsg('', 'ok');
       try {
-        setMsg('전송 중…', 'ok');
         if (endpoint.includes('script.google.com')) {
           // Google Apps Script: CORS 응답이 없어 no-cors로 전송(응답은 못 읽음 → 완료=성공으로 간주)
           await fetch(endpoint, {
@@ -221,6 +254,8 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
         setMsg('상담 신청이 접수되었습니다. 곧 연락드리겠습니다. 감사합니다!', 'ok');
       } catch {
         setMsg('전송에 실패했습니다. 전화로 문의해 주세요.', 'err');
+      } finally {
+        setLoading(false);
       }
     } else {
       // 엔드포인트 미설정 시: 문자(SMS)로 폴백 (모바일)
