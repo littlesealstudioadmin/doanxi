@@ -14,7 +14,6 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
     <div class="ft__contact">
       <p><strong>분양 상담</strong> {agent.name} {agent.title}</p>
       <p><a href={`tel:${telDigits}`}>{agent.phone}</a></p>
-      <p class="ft__official">{agent.phoneOfficialLabel} {agent.phoneOfficial}</p>
     </div>
   </div>
 
@@ -63,11 +62,6 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
     font-size: 1.3rem;
     font-weight: 800;
     color: var(--accent);
-  }
-  .ft__official {
-    margin-top: 6px;
-    font-size: 0.84rem;
-    color: rgba(255, 255, 255, 0.45);
   }
   .ft__notice {
     margin-top: 24px;

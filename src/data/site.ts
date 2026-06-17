@@ -23,8 +23,6 @@ export const site = {
     title: '분양 상담사',
     phone: '1844-1831',
     kakaoUrl: '', // TODO(선택): 카카오톡 오픈채팅/채널 링크
-    phoneOfficialLabel: '대표 분양문의',
-    phoneOfficial: '1533-5400', // 공식 분양문의(참고)
   },
 
   /** 리드폼(관심고객/상담신청) 전송 설정

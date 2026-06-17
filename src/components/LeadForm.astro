@@ -9,16 +9,11 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
     <div class="lead-wrap">
       <div class="lead-copy reveal">
         <h2>관심고객 등록 &amp; 방문 상담</h2>
-        <p>
-          분양가·동·호수·계약조건 등 상세한 안내는 <strong>{agent.name} {agent.title}</strong>가
-          1:1로 상담해 드립니다. 편하게 연락 남겨주세요.
-        </p>
         {leadForm.gift && <p class="lead-copy__gift"><span aria-hidden="true">🎁</span> {leadForm.gift}</p>}
         <div class="lead-copy__cta">
           <a href={`tel:${telDigits}`} class="btn btn--primary btn--lg">☎ {agent.phone}</a>
           {agent.kakaoUrl && <a href={agent.kakaoUrl} class="btn btn--ghost btn--lg" target="_blank" rel="noopener">카카오톡 상담</a>}
         </div>
-        <p class="lead-copy__official">{agent.phoneOfficialLabel} {agent.phoneOfficial}</p>
       </div>
 
       <form class="lead-form reveal" id="leadForm" novalidate
@@ -99,11 +94,6 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
     font-weight: 700;
     font-size: 0.95rem;
     line-height: 1.4;
-  }
-  .lead-copy__official {
-    margin-top: 16px;
-    font-size: 0.86rem;
-    color: rgba(255, 255, 255, 0.5);
   }
 
   .lead-form {
