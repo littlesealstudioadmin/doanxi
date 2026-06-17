@@ -1,0 +1,114 @@
+---
+import { Image } from 'astro:assets';
+import { img } from '../lib/images';
+---
+
+<div class="popup" id="popup" hidden>
+  <div class="popup__box" role="dialog" aria-label="안내 팝업">
+    <a href="#contact" class="popup__img" id="popup-link">
+      <Image
+        src={img('popup/popup.png')}
+        alt="도안자이 센텀리체 안내 — 상담 신청"
+        widths={[480, 768]}
+        sizes="(max-width: 520px) 92vw, 420px"
+      />
+    </a>
+    <div class="popup__bar">
+      <button type="button" class="popup__today" id="popup-today">오늘 하루 보지 않기</button>
+      <button type="button" class="popup__close" id="popup-close">닫기 ✕</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .popup {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: rgba(8, 12, 22, 0.78);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .popup__box {
+    display: flex;
+    flex-direction: column;
+    max-width: min(420px, 92vw);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+    background: #fff;
+  }
+  .popup__img {
+    display: block;
+    line-height: 0;
+    cursor: pointer;
+  }
+  .popup__img img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 76vh;
+    object-fit: contain;
+  }
+  .popup__bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #14181f;
+  }
+  .popup__bar button {
+    flex: 1;
+    padding: 13px 10px;
+    background: none;
+    border: 0;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .popup__today {
+    border-right: 1px solid rgba(255, 255, 255, 0.14) !important;
+  }
+  .popup__close {
+    color: #fff !important;
+  }
+  .popup__bar button:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+</style>
+
+<script>
+  const KEY = 'dax_popup_hide';
+  const popup = document.getElementById('popup');
+  const today = new Date().toDateString();
+  const close = () => {
+    if (popup) popup.hidden = true;
+  };
+  // '오늘 하루 보지 않기'로 오늘 날짜가 저장돼 있지 않으면 노출
+  let hidden = false;
+  try {
+    hidden = localStorage.getItem(KEY) === today;
+  } catch {
+    hidden = false;
+  }
+  if (popup && !hidden) popup.hidden = false;
+
+  document.getElementById('popup-close')?.addEventListener('click', close);
+  document.getElementById('popup-today')?.addEventListener('click', () => {
+    try {
+      localStorage.setItem(KEY, today);
+    } catch {
+      /* 프라이빗 모드 등 — 무시 */
+    }
+    close();
+  });
+  document.getElementById('popup-link')?.addEventListener('click', close);
+  popup?.addEventListener('click', (e) => {
+    if (e.target === popup) close();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close();
+  });
+</script>

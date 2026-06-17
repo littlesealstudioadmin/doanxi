@@ -13,6 +13,7 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
           분양가·동·호수·계약조건 등 상세한 안내는 <strong>{agent.name} {agent.title}</strong>가
           1:1로 상담해 드립니다. 편하게 연락 남겨주세요.
         </p>
+        {leadForm.gift && <p class="lead-copy__gift"><span aria-hidden="true">🎁</span> {leadForm.gift}</p>}
         <div class="lead-copy__cta">
           <a href={`tel:${telDigits}`} class="btn btn--primary btn--lg">☎ {agent.phone}</a>
           {agent.kakaoUrl && <a href={agent.kakaoUrl} class="btn btn--ghost btn--lg" target="_blank" rel="noopener">카카오톡 상담</a>}
@@ -81,6 +82,20 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
     flex-wrap: wrap;
     gap: 12px;
     margin-top: 24px;
+  }
+  .lead-copy__gift {
+    margin-top: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border: 1px solid rgba(227, 200, 148, 0.5);
+    background: rgba(227, 200, 148, 0.12);
+    border-radius: 10px;
+    color: #f0dcb4;
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1.4;
   }
   .lead-copy__official {
     margin-top: 16px;
@@ -184,15 +199,24 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
     const interest = String(data.get('interest') || '');
 
     if (endpoint) {
-      // 폼 엔드포인트(Formspree 등)로 전송
       try {
         setMsg('전송 중…', 'ok');
-        const res = await fetch(endpoint, {
-          method: 'POST',
-          headers: { Accept: 'application/json' },
-          body: data,
-        });
-        if (!res.ok) throw new Error('bad status');
+        if (endpoint.includes('script.google.com')) {
+          // Google Apps Script: CORS 응답이 없어 no-cors로 전송(응답은 못 읽음 → 완료=성공으로 간주)
+          await fetch(endpoint, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: new URLSearchParams({ name, phone, interest, agree: '동의' }),
+          });
+        } else {
+          // 일반 폼 엔드포인트(Formspree 등)
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { Accept: 'application/json' },
+            body: data,
+          });
+          if (!res.ok) throw new Error('bad status');
+        }
         form.reset();
         setMsg('상담 신청이 접수되었습니다. 곧 연락드리겠습니다. 감사합니다!', 'ok');
       } catch {

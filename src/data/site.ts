@@ -21,7 +21,7 @@ export const site = {
   agent: {
     name: '송형규', // 분양 상담 담당
     title: '분양 상담사',
-    phone: '010-0000-0000', // TODO: 담당자 휴대폰 번호 (상담 전화/문자 CTA에 사용)
+    phone: '1844-1831',
     kakaoUrl: '', // TODO(선택): 카카오톡 오픈채팅/채널 링크
     phoneOfficialLabel: '대표 분양문의',
     phoneOfficial: '1533-5400', // 공식 분양문의(참고)
@@ -31,9 +31,10 @@ export const site = {
    *  → 백엔드 없이 동작하는 방법(택1): Formspree / Google Apps Script / 네이버 폼 등
    *  → endpoint 가 비어 있으면 "전화/문자"로 유도하는 폴백 동작 */
   leadForm: {
-    endpoint: '', // TODO: 폼 POST 엔드포인트 (예: https://formspree.io/f/xxxx)
+    endpoint: 'https://script.google.com/macros/s/AKfycbytFDVaRpF9hnk3ggbSmFMRg1UvjKZEr00kS1Tb8xtImI959HwJ07KSWohAIYPEvazK/exec', // Google Apps Script 웹앱 → 구글 시트 누적
     // 수집 항목: 별도(관심평형 포함) vs 연락처만 — 클라이언트 확정 후 fields 조정
     askInterestType: true, // false 면 이름+연락처만 수집
+    gift: '관심고객 등록·방문 상담 시 방문 사은품(신세계상품권)을 드립니다.',
     privacyNote:
       '수집된 개인정보(성함·연락처)는 분양 상담 목적에 한해 이용되며, 상담 완료 후 파기됩니다.',
   },
