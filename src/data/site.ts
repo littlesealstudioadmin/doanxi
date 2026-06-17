@@ -31,7 +31,7 @@ export const site = {
    *  → 백엔드 없이 동작하는 방법(택1): Formspree / Google Apps Script / 네이버 폼 등
    *  → endpoint 가 비어 있으면 "전화/문자"로 유도하는 폴백 동작 */
   leadForm: {
-    endpoint: 'https://script.google.com/macros/s/AKfycbxNIS2ha8LxXu67Jet-aUiRZOWFDEebLcVkYD9EJdyqipaTwYAT1iISkba6wi5O2A6L/exec', // Google Apps Script 웹앱 → 구글 시트 누적
+    endpoint: 'https://script.google.com/macros/s/AKfycbzG9wcGDZ-3sHt4GzoEu8U_x9vo1lv7L146jNje-XplqkNjcaENL-XhKE8WVd8HmCm5/exec', // Google Apps Script 웹앱 → 구글 시트 누적
     // 수집 항목: 별도(관심평형 포함) vs 연락처만 — 클라이언트 확정 후 fields 조정
     askInterestType: true, // false 면 이름+연락처만 수집
     gift: '관심고객 등록·방문 상담 시 방문 사은품(신세계상품권)을 드립니다.',
