@@ -18,7 +18,7 @@ const telHref = `tel:${agent.phone.replace(/[^0-9+]/g, '')}`;
 
     <div class="hdr__cta">
       <a href={telHref} class="btn btn--primary hdr__call">
-        <span aria-hidden="true">☎</span> 전화상담
+        <span aria-hidden="true">☎</span> {agent.phone}
       </a>
       <button class="hdr__menu" aria-label="메뉴 열기" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -83,7 +83,9 @@ const telHref = `tel:${agent.phone.replace(/[^0-9+]/g, '')}`;
   }
   .hdr__call {
     padding: 9px 18px;
-    font-size: 0.92rem;
+    font-size: 1.02rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
   }
   .hdr__menu {
     display: none;
@@ -155,4 +157,11 @@ const telHref = `tel:${agent.phone.replace(/[^0-9+]/g, '')}`;
       btn?.setAttribute('aria-expanded', 'false');
     }),
   );
+
+  // 로고 클릭 → 맨 위로(sticky 헤더가 #top 앵커라 기본 점프가 안 먹어 직접 스크롤)
+  const logo = document.querySelector('.hdr__logo');
+  logo?.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 </script>
