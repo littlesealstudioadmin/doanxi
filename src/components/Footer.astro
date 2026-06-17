@@ -1,7 +1,7 @@
 ---
-import { site } from '../data/site';
+import { site } from "../data/site";
 const { agent } = site;
-const telDigits = agent.phone.replace(/[^0-9+]/g, '');
+const telDigits = agent.phone.replace(/[^0-9+]/g, "");
 ---
 
 <footer class="ft">
@@ -10,24 +10,26 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
       <p class="ft__title">도안자이 센텀리체</p>
       <p class="ft__sub">대전 유성구 용계동 · 도안신도시 · GS건설 자이</p>
     </div>
-
-    <div class="ft__contact">
-      <p><strong>분양 상담</strong> {agent.name} {agent.title}</p>
-      <p><a href={`tel:${telDigits}`}>{agent.phone}</a></p>
-    </div>
   </div>
 
   <div class="ft__notice container">
     <p>
-      ※ 본 사이트는 분양 상담을 위한 <strong>개인 홍보물</strong>이며, 공식 홈페이지가 아닙니다.
-      정확한 정보는 GS건설 공식 홈페이지(<a href="https://xi.co.kr/DAX" target="_blank" rel="noopener noreferrer">xi.co.kr/DAX</a>) 및
-      입주자 모집공고를 확인하시기 바랍니다.
+      ※ 본 사이트는 분양 상담을 위한 <strong>개인 홍보물</strong>이며, 공식
+      홈페이지가 아닙니다. 정확한 정보는 GS건설 공식 홈페이지(<a
+        href="https://xi.co.kr/DAX"
+        target="_blank"
+        rel="noopener noreferrer">xi.co.kr/DAX</a
+      >) 및 입주자 모집공고를 확인하시기 바랍니다.
     </p>
     <p>
-      ※ 게재된 이미지·평면도·조감도는 소비자의 이해를 돕기 위한 것으로 실제와 다를 수 있으며,
-      일부 시설·계획은 변경될 수 있습니다. 분양 조건은 입주자 모집공고를 기준으로 합니다.
+      ※ 게재된 이미지·평면도·조감도는 소비자의 이해를 돕기 위한 것으로 실제와
+      다를 수 있으며, 일부 시설·계획은 변경될 수 있습니다. 분양 조건은 입주자
+      모집공고를 기준으로 합니다.
     </p>
-    <p class="ft__copy">© 도안자이 센텀리체 분양 상담. 본 페이지의 콘텐츠 권리는 각 권리자에게 있습니다.</p>
+    <p class="ft__copy">
+      © 도안자이 센텀리체 분양 상담. 본 페이지의 콘텐츠 권리는 각 권리자에게
+      있습니다.
+    </p>
   </div>
 </footer>
 
