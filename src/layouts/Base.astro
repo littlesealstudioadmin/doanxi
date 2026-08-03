@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { site } from '../data/site';
+import VisitLogger from '../components/VisitLogger.astro';
 
 const { meta } = site;
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
@@ -138,5 +139,8 @@ const jsonLd = {
       );
       document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
     </script>
+
+    <!-- 방문 로그(파워링크 유입경로·무효클릭 확인) -->
+    <VisitLogger />
   </body>
 </html>

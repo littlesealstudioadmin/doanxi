@@ -37,6 +37,13 @@ export const site = {
       '수집된 개인정보(성함·연락처)는 분양 상담 목적에 한해 이용되며, 상담 완료 후 파기됩니다.',
   },
 
+  /** 방문 로그(파워링크 유입경로·무효클릭 확인용)
+   *  → 별도 구글시트 + Apps Script 웹앱(scripts/apps-script-visit-log.gs) 배포 후 URL 입력
+   *  → endpoint 가 비어 있으면 아무것도 수집하지 않음 */
+  visitLog: {
+    endpoint: 'https://script.google.com/macros/s/AKfycbxYZ3nBuaRcc3Fnr2Bkdv-Jzfx3d3K7C5OUhpKDoTMY7a43wI-Sfr1Uk5abgeb37bCt/exec', // Apps Script 웹앱 → 방문로그 시트 누적
+  },
+
   /** 히어로(첫 화면) */
   hero: {
     headline: ['대전의 새로운 중심,', '도안자이 센텀리체'],

@@ -1,0 +1,45 @@
+---
+/**
+ * 방문 로그 수집기 — 파워링크 유입경로·무효클릭 확인용
+ * 페이지 진입마다 IP·유입경로·검색키워드를 구글시트(Apps Script)로 전송
+ * site.ts 의 visitLog.endpoint 가 비어 있으면 렌더링되지 않음(수집 안 함)
+ */
+import { site } from '../data/site';
+
+const endpoint = site.visitLog?.endpoint ?? '';
+---
+
+{endpoint && <span id="visit-logger" data-endpoint={endpoint} hidden></span>}
+
+<script>
+  const holder = document.getElementById('visit-logger');
+  const endpoint = holder?.dataset.endpoint;
+  const isLocal = /^(localhost|127\.|192\.168\.)/.test(location.hostname);
+
+  if (endpoint && !isLocal) {
+    (async () => {
+      // IP는 서버가 없어 외부 조회로 확보(실패해도 나머지는 기록)
+      let ip = '';
+      try {
+        const res = await fetch('https://api.ipify.org?format=json', {
+          signal: AbortSignal.timeout(4000),
+        });
+        ip = (await res.json()).ip || '';
+      } catch {
+        /* IP 조회 실패 시 공란 */
+      }
+
+      const q = new URLSearchParams(location.search);
+      const body = new URLSearchParams({
+        ip,
+        keyword: q.get('n_query') || q.get('utm_term') || '',
+        referrer: document.referrer,
+        query: location.search.slice(1, 500),
+        ua: navigator.userAgent,
+        screen: `${screen.width}x${screen.height}`,
+      });
+
+      fetch(endpoint, { method: 'POST', mode: 'no-cors', body, keepalive: true }).catch(() => {});
+    })();
+  }
+</script>
