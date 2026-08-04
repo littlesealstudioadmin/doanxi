@@ -18,6 +18,7 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
 
       <form class="lead-form reveal" id="leadForm" novalidate
         data-endpoint={leadForm.endpoint}
+        data-site={site.label}
         data-phone={telDigits}>
         <div class="field">
           <label for="lf-name">성함</label>
@@ -219,6 +220,9 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
 
     const endpoint = form.dataset.endpoint;
     const interest = String(data.get('interest') || '');
+    // 어느 사이트에서 들어온 신청인지 구분 (시트의 '유입사이트' 열)
+    const siteLabel = form.dataset.site || '';
+    if (siteLabel) data.set('site', siteLabel);
 
     if (endpoint) {
       setLoading(true);
@@ -229,7 +233,7 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
           await fetch(endpoint, {
             method: 'POST',
             mode: 'no-cors',
-            body: new URLSearchParams({ name, phone, interest, agree: '동의' }),
+            body: new URLSearchParams({ name, phone, interest, agree: '동의', site: siteLabel }),
           });
         } else {
           // 일반 폼 엔드포인트(Formspree 등)

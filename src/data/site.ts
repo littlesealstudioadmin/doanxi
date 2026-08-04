@@ -4,9 +4,25 @@
  * ───────────────────────────────────────────────────────────
  *  ※ 사이트의 모든 문구/수치/연락처는 이 파일에서만 수정하면 됩니다.
  *  ※ "TODO" 표시는 실제 정보 입력이 필요한 항목입니다.
+ *
+ *  [멀티 사이트]
+ *  같은 코드로 주소·전화번호만 다른 사이트를 여러 개 배포합니다.
+ *  아래 env(...) 로 감싼 값은 빌드 환경변수로 덮어쓸 수 있고,
+ *  환경변수가 없으면 괄호 안 기본값(=1번 사이트)이 그대로 쓰입니다.
+ *  자세한 배포 방법은 README '두 번째 사이트 배포' 참고.
  */
 
+/** 빌드 시점(Node) 환경변수 읽기. 클라이언트 번들에는 값이 이미 박혀 나가므로 안전 */
+const env = (key: string, fallback: string): string => {
+  const v = typeof process !== 'undefined' ? process.env?.[key] : undefined;
+  return v && v.trim() ? v.trim() : fallback;
+};
+
 export const site = {
+  /** 이 배포본을 구분하는 라벨 — 상담신청/방문로그 시트의 '유입사이트' 열에 기록됨
+   *  → 2번 사이트는 빌드 환경변수 SITE_LABEL=2번사이트 로 배포 */
+  label: env('SITE_LABEL', '1번사이트'),
+
   /** 기본 메타 / SEO */
   meta: {
     title: '도안자이 센텀리체 | 대전 도안신도시 GS건설 자이 대단지',
@@ -21,15 +37,20 @@ export const site = {
   agent: {
     name: '송형규', // 분양 상담 담당
     title: '분양 상담사',
-    phone: '1844-1831',
-    kakaoUrl: '', // TODO(선택): 카카오톡 오픈채팅/채널 링크
+    phone: env('AGENT_PHONE', '1844-1831'), // 사이트별 대표번호 (전화 CTA·플로팅바·푸터에 전부 연결)
+    kakaoUrl: env('AGENT_KAKAO_URL', ''), // (선택) 카카오톡 오픈채팅/채널 링크
   },
 
   /** 리드폼(관심고객/상담신청) 전송 설정
    *  → 백엔드 없이 동작하는 방법(택1): Formspree / Google Apps Script / 네이버 폼 등
    *  → endpoint 가 비어 있으면 "전화/문자"로 유도하는 폴백 동작 */
   leadForm: {
-    endpoint: 'https://script.google.com/macros/s/AKfycbzG9wcGDZ-3sHt4GzoEu8U_x9vo1lv7L146jNje-XplqkNjcaENL-XhKE8WVd8HmCm5/exec', // Google Apps Script 웹앱 → 구글 시트 누적
+    // 두 사이트가 같은 시트를 공유하고 '유입사이트' 열로 구분 (site.label 값이 함께 전송됨)
+    // → 시트를 분리하려면 2번 사이트 빌드에 LEAD_ENDPOINT 환경변수로 다른 웹앱 URL 지정
+    endpoint: env(
+      'LEAD_ENDPOINT',
+      'https://script.google.com/macros/s/AKfycbzG9wcGDZ-3sHt4GzoEu8U_x9vo1lv7L146jNje-XplqkNjcaENL-XhKE8WVd8HmCm5/exec',
+    ), // Google Apps Script 웹앱 → 구글 시트 누적
     // 수집 항목: 별도(관심평형 포함) vs 연락처만 — 클라이언트 확정 후 fields 조정
     askInterestType: true, // false 면 이름+연락처만 수집
     gift: '관심고객 등록·방문 상담 시 방문 사은품(신세계상품권)을 드립니다.',
@@ -41,7 +62,10 @@ export const site = {
    *  → 별도 구글시트 + Apps Script 웹앱(scripts/apps-script-visit-log.gs) 배포 후 URL 입력
    *  → endpoint 가 비어 있으면 아무것도 수집하지 않음 */
   visitLog: {
-    endpoint: 'https://script.google.com/macros/s/AKfycbxYZ3nBuaRcc3Fnr2Bkdv-Jzfx3d3K7C5OUhpKDoTMY7a43wI-Sfr1Uk5abgeb37bCt/exec', // Apps Script 웹앱 → 방문로그 시트 누적
+    endpoint: env(
+      'VISITLOG_ENDPOINT',
+      'https://script.google.com/macros/s/AKfycbxYZ3nBuaRcc3Fnr2Bkdv-Jzfx3d3K7C5OUhpKDoTMY7a43wI-Sfr1Uk5abgeb37bCt/exec',
+    ), // Apps Script 웹앱 → 방문로그 시트 누적
   },
 
   /** 히어로(첫 화면) */

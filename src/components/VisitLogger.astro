@@ -9,11 +9,12 @@ import { site } from '../data/site';
 const endpoint = site.visitLog?.endpoint ?? '';
 ---
 
-{endpoint && <span id="visit-logger" data-endpoint={endpoint} hidden></span>}
+{endpoint && <span id="visit-logger" data-endpoint={endpoint} data-site={site.label} hidden></span>}
 
 <script>
   const holder = document.getElementById('visit-logger');
   const endpoint = holder?.dataset.endpoint;
+  const siteLabel = holder?.dataset.site || '';
   const isLocal = /^(localhost|127\.|192\.168\.)/.test(location.hostname);
 
   if (endpoint && !isLocal) {
@@ -32,6 +33,7 @@ const endpoint = site.visitLog?.endpoint ?? '';
       const q = new URLSearchParams(location.search);
       const body = new URLSearchParams({
         ip,
+        site: siteLabel,
         keyword: q.get('n_query') || q.get('utm_term') || '',
         referrer: document.referrer,
         query: location.search.slice(1, 500),
