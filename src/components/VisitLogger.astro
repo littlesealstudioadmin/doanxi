@@ -34,7 +34,10 @@ const endpoint = site.visitLog?.endpoint ?? '';
       const body = new URLSearchParams({
         ip,
         site: siteLabel,
-        keyword: q.get('n_query') || q.get('utm_term') || '',
+        // 네이버는 n_query(실제 검색어)를 URL로 넘겨줌.
+        // 구글은 검색어를 절대 안 넘기므로, 광고 최종 URL 접미어에
+        // utm_term={keyword} 를 걸어야 입찰 키워드라도 잡힘.
+        keyword: q.get('n_query') || q.get('utm_term') || q.get('keyword') || '',
         referrer: document.referrer,
         query: location.search.slice(1, 500),
         ua: navigator.userAgent,
