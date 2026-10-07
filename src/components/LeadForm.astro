@@ -21,8 +21,8 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
         data-site={site.label}
         data-phone={telDigits}>
         <div class="field">
-          <label for="lf-name">성함</label>
-          <input id="lf-name" name="name" type="text" required placeholder="홍길동" autocomplete="name" />
+          <label for="lf-name">닉네임</label>
+          <input id="lf-name" name="name" type="text" required placeholder="실명이 아니어도 됩니다" autocomplete="nickname" />
         </div>
         <div class="field">
           <label for="lf-phone">연락처</label>
@@ -95,6 +95,9 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
     font-weight: 700;
     font-size: 0.95rem;
     line-height: 1.4;
+    /* 두 줄로 넘어갈 때 단어 중간에서 끊기지 않고, 줄 길이가 고르게 */
+    word-break: keep-all;
+    text-wrap: balance;
   }
 
   .lead-form {
@@ -215,7 +218,7 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
     const data = new FormData(form);
     const name = String(data.get('name') || '').trim();
     const phone = String(data.get('phone') || '').trim();
-    if (!name || !phone) return setMsg('성함과 연락처를 입력해 주세요.', 'err');
+    if (!name || !phone) return setMsg('닉네임과 연락처를 입력해 주세요.', 'err');
     if (!data.get('agree')) return setMsg('개인정보 수집·이용에 동의해 주세요.', 'err');
 
     const endpoint = form.dataset.endpoint;
@@ -258,7 +261,7 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
       // 엔드포인트 미설정 시: 문자(SMS)로 폴백 (모바일)
       const agentPhone = form.dataset.phone || '';
       const body = encodeURIComponent(
-        `[도안자이 센텀리체 상담] 성함:${name} / 연락처:${phone}${interest ? ` / 관심:${interest}` : ''}`,
+        `[도안자이 센텀리체 상담] 닉네임:${name} / 연락처:${phone}${interest ? ` / 관심:${interest}` : ''}`,
       );
       window.location.href = `sms:${agentPhone}?body=${body}`;
       setMsg('문자 앱으로 연결됩니다. 전송이 안 되면 전화로 문의해 주세요.', 'ok');

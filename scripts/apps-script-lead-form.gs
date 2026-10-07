@@ -24,7 +24,7 @@ var NOTIFY_EMAIL = 'a01094088814@gmail.com'; // 접수 알림 받을 주소 (비
 var SITE_NAME = '2번사이트'; // 메일 제목에 표기 (사이트에서 보내온 값이 있으면 그 값 우선)
 var SHEET_NAME = '상담신청';
 
-var HEADERS = ['접수시각', '유입사이트', '성함', '연락처', '관심평형', '개인정보동의'];
+var HEADERS = ['접수시각', '유입사이트', '닉네임', '연락처', '관심평형', '개인정보동의'];
 
 function doPost(e) {
   var lock = LockService.getScriptLock();
@@ -75,7 +75,7 @@ function notify_(p, label, now) {
       subject: '[도안자이 상담신청 · ' + label + '] ' + (p.name || '') + ' 님',
       body: [
         '유입사이트: ' + label,
-        '성함: ' + (p.name || ''),
+        '닉네임: ' + (p.name || ''),
         '연락처: ' + (p.phone || ''),
         '관심평형: ' + (p.interest || '-'),
         '개인정보 동의: ' + (p.agree || ''),

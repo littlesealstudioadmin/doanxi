@@ -52,10 +52,10 @@ export const site = {
       'https://script.google.com/macros/s/AKfycbzG9wcGDZ-3sHt4GzoEu8U_x9vo1lv7L146jNje-XplqkNjcaENL-XhKE8WVd8HmCm5/exec',
     ), // Google Apps Script 웹앱 → 구글 시트 누적
     // 수집 항목: 별도(관심평형 포함) vs 연락처만 — 클라이언트 확정 후 fields 조정
-    askInterestType: true, // false 면 이름+연락처만 수집
-    gift: '관심고객 등록·방문 상담 시 방문 사은품(신세계상품권)을 드립니다.',
+    askInterestType: true, // false 면 닉네임+연락처만 수집
+    gift: '관심고객 등록 후 모델하우스 관람 시 특별사은품 & 신세계상품권을 드립니다.',
     privacyNote:
-      '수집된 개인정보(성함·연락처)는 분양 상담 목적에 한해 이용되며, 상담 완료 후 파기됩니다.',
+      '수집된 개인정보(닉네임·연락처)는 분양 상담 목적에 한해 이용되며, 상담 완료 후 파기됩니다.',
   },
 
   /** 방문 로그(파워링크 유입경로·무효클릭 확인용)

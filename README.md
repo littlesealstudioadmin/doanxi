@@ -32,7 +32,7 @@ npm run preview  # 빌드 결과 미리보기
 | `agent.phone` | **담당자 휴대폰 번호** | 전화/문자 CTA, 푸터, 플로팅바에 전부 연결됨 (현재 `010-0000-0000` 임시값) |
 | `agent.kakaoUrl` | 카카오톡 링크(선택) | 오픈채팅/채널 URL. 비우면 버튼 미노출 |
 | `leadForm.endpoint` | **폼 전송 주소** | 비우면 제출 시 문자(SMS) 앱으로 폴백. 채우면 해당 주소로 전송 |
-| `leadForm.askInterestType` | 관심평형 수집 여부 | `false` 면 이름+연락처만 수집 |
+| `leadForm.askInterestType` | 관심평형 수집 여부 | `false` 면 닉네임+연락처만 수집 |
 
 ### 리드폼 백엔드 (택1, 무료로 가능)
 - **Formspree**: formspree.io 가입 → 폼 생성 → 받은 `https://formspree.io/f/xxxx` 를 `endpoint` 에 입력
