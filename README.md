@@ -99,6 +99,7 @@ src/assets/images/
 | `AGENT_KAKAO_URL` | (없음) | 카카오톡 상담 버튼 (비우면 버튼 미노출) |
 | `LEAD_ENDPOINT` | 1번 시트 웹앱 URL | 상담신청 수집 주소 — **2번 사이트는 반드시 지정** |
 | `VISITLOG_ENDPOINT` | 1번 시트 웹앱 URL | 방문로그 수집 주소 — **2번 사이트는 반드시 지정** |
+| `GTM_ID` | `site.ts` 의 `gtm.id` | Google Tag Manager 컨테이너 ID(`GTM-XXXXXXX`). 2번 사이트에서 끄려면 `off` |
 
 > `LEAD_ENDPOINT`·`VISITLOG_ENDPOINT` 를 비워두면 **2번 사이트 상담신청이 1번 시트로 들어갑니다.**
 > 2번 프로젝트에는 반드시 채워 넣으세요.
@@ -189,4 +190,6 @@ SYSTEM+기본제공품목 · 평면안내(84·99·115·134㎡) · 상담신청(�
 ## 기술 메모
 - Astro 5 + `astro:assets` 자동 이미지 최적화(WebP) + `@astrojs/sitemap`
 - JSON-LD(ApartmentComplex/RealEstateAgent), Open Graph, canonical 적용 — 공식 사이트에 없던 SEO 요소
-- 무빌드 추적코드 없음(필요 시 GA4 추가). 외부 폰트는 Pretendard CDN.
+- Google Tag Manager: `site.ts` 의 `gtm.id` 에 컨테이너 ID를 넣으면 `<head>`·`<body>` 에 공식 스니펫이 출력됨(비우면 미출력).
+  상담신청 접수 성공 시 dataLayer 에 `generate_lead` 이벤트를 push → GTM 에서 '맞춤 이벤트' 트리거로 전환 태그 연결.
+- 외부 폰트는 Pretendard CDN.

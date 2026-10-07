@@ -246,6 +246,9 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, '');
         }
         form.reset();
         setMsg('상담 신청이 접수되었습니다. 곧 연락드리겠습니다. 감사합니다!', 'ok');
+        // GTM 전환 트리거용 — 접수 성공 시에만 발생(개인정보는 싣지 않음). GTM 미설치여도 무해
+        const w = window as unknown as { dataLayer?: unknown[] };
+        (w.dataLayer = w.dataLayer || []).push({ event: 'generate_lead' });
       } catch {
         setMsg('전송에 실패했습니다. 전화로 문의해 주세요.', 'err');
       } finally {

@@ -68,6 +68,14 @@ export const site = {
     ), // Apps Script 웹앱 → 방문로그 시트 누적
   },
 
+  /** Google Tag Manager(구글 애즈 전환 추적용)
+   *  → tagmanager.google.com 에서 컨테이너 생성 후 받은 ID(GTM-XXXXXXX) 입력
+   *  → 비어 있거나 GTM-… 형식이 아니면 태그가 렌더링되지 않음
+   *  → 2번 사이트는 빌드 환경변수 GTM_ID 로 자기 컨테이너 지정 (끄려면 GTM_ID=off) */
+  gtm: {
+    id: env('GTM_ID', 'GTM-5X6NLBV6'), // 1번 사이트 컨테이너
+  },
+
   /** 히어로(첫 화면) */
   hero: {
     headline: ['대전의 새로운 중심,', '도안자이 센텀리체'],
