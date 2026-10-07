@@ -1,7 +1,7 @@
 ---
 /**
  * 방문 로그 수집기 — 파워링크 유입경로·무효클릭 확인용
- * 페이지 진입마다 IP·유입경로·검색키워드를 구글시트(Apps Script)로 전송
+ * 페이지 진입마다 IP·유입분류·검색키워드를, 이탈 시 체류시간을 구글시트(Apps Script)로 전송
  * site.ts 의 visitLog.endpoint 가 비어 있으면 렌더링되지 않음(수집 안 함)
  */
 import { site } from '../data/site';
@@ -12,15 +12,48 @@ const endpoint = site.visitLog?.endpoint ?? '';
 {endpoint && <span id="visit-logger" data-endpoint={endpoint} data-site={site.label} hidden></span>}
 
 <script>
+  import { classifyVisit } from '../lib/visit';
+
   const holder = document.getElementById('visit-logger');
   const endpoint = holder?.dataset.endpoint;
   const siteLabel = holder?.dataset.site || '';
   const isLocal = /^(localhost|127\.|192\.168\.)/.test(location.hostname);
 
   if (endpoint && !isLocal) {
+    const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+    const { channel, keyword } = classifyVisit({
+      search: location.search,
+      referrer: document.referrer,
+      ua: navigator.userAgent,
+      host: location.hostname,
+      navType: nav?.type ?? '',
+    });
+
+    // 방문 1건을 가리키는 ID — 진입 때 쌓은 행에 이탈 시 체류시간을 덮어쓰기 위함
+    // (시트가 숫자로 바꿔 읽지 않도록 v 접두)
+    const vid = 'v' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    let ip = '';
+
+    // 진입·이탈 모두 같은 내용을 보내고, 시트 쪽에서 방문ID로 한 행에 합침
+    // → 어느 쪽이 먼저 도착하든, 한쪽이 유실되든 행은 하나만 남음
+    const send = (dwell?: number) => {
+      const body = new URLSearchParams({
+        vid,
+        ip,
+        site: siteLabel,
+        channel,
+        keyword,
+        referrer: document.referrer,
+        query: location.search.slice(1, 500),
+        ua: navigator.userAgent,
+        screen: `${screen.width}x${screen.height}`,
+      });
+      if (dwell !== undefined) body.set('dwell', String(dwell));
+      fetch(endpoint, { method: 'POST', mode: 'no-cors', body, keepalive: true }).catch(() => {});
+    };
+
     (async () => {
       // IP는 서버가 없어 외부 조회로 확보(실패해도 나머지는 기록)
-      let ip = '';
       try {
         const res = await fetch('https://api.ipify.org?format=json', {
           signal: AbortSignal.timeout(4000),
@@ -29,22 +62,27 @@ const endpoint = site.visitLog?.endpoint ?? '';
       } catch {
         /* IP 조회 실패 시 공란 */
       }
-
-      const q = new URLSearchParams(location.search);
-      const body = new URLSearchParams({
-        ip,
-        site: siteLabel,
-        // 네이버는 n_query(실제 검색어)를 URL로 넘겨줌.
-        // 구글은 검색어를 절대 안 넘기므로, 광고 최종 URL 접미어에
-        // utm_term={keyword} 를 걸어야 입찰 키워드라도 잡힘.
-        keyword: q.get('n_query') || q.get('utm_term') || q.get('keyword') || '',
-        referrer: document.referrer,
-        query: location.search.slice(1, 500),
-        ua: navigator.userAgent,
-        screen: `${screen.width}x${screen.height}`,
-      });
-
-      fetch(endpoint, { method: 'POST', mode: 'no-cors', body, keepalive: true }).catch(() => {});
+      send();
     })();
+
+    // 체류시간 = 화면이 실제로 보인 시간만 누적(다른 탭·앱으로 넘어가 있던 시간 제외)
+    let shownAt: number | null = document.visibilityState === 'visible' ? performance.now() : null;
+    let visibleMs = 0;
+    let lastSent = -1;
+    const leave = () => {
+      if (shownAt !== null) {
+        visibleMs += performance.now() - shownAt;
+        shownAt = null;
+      }
+      const sec = Math.round(visibleMs / 1000);
+      if (sec === lastSent) return; // hidden·pagehide 가 연달아 올 때 중복 전송 방지
+      lastSent = sec;
+      send(sec);
+    };
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') leave();
+      else shownAt = performance.now();
+    });
+    window.addEventListener('pagehide', leave);
   }
 </script>
