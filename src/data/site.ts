@@ -23,6 +23,16 @@ export const site = {
    *  → 2번 사이트는 빌드 환경변수 SITE_LABEL=2번사이트 로 배포 */
   label: env('SITE_LABEL', '1번사이트'),
 
+  /** 푸터 사업자 정보 — 사이트(label)별로 다름. 해당 사이트 값이 없으면 푸터에 미노출
+   *  → 2번 사이트는 빌드 환경변수 SITE_LABEL=2번사이트 로 이미 배포 중이라 별도 설정 불필요 */
+  business: ({
+    '2번사이트': {
+      name: '㈜제이케이홀딩스',
+      ceo: '김민수',
+      regNo: '181-87-01575',
+    },
+  } as Record<string, { name: string; ceo: string; regNo: string }>)[env('SITE_LABEL', '1번사이트')],
+
   /** 기본 메타 / SEO */
   meta: {
     title: '도안자이 센텀리체 | 대전 도안신도시 GS건설 자이 대단지',

@@ -1,6 +1,6 @@
 ---
 import { site } from "../data/site";
-const { agent } = site;
+const { agent, business } = site;
 const telDigits = agent.phone.replace(/[^0-9+]/g, "");
 ---
 
@@ -26,6 +26,15 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, "");
       다를 수 있으며, 일부 시설·계획은 변경될 수 있습니다. 분양 조건은 입주자
       모집공고를 기준으로 합니다.
     </p>
+    {
+      business && (
+        <p class="ft__biz">
+          <span>상호명 {business.name}</span>
+          <span>대표자 {business.ceo}</span>
+          <span>사업자등록번호 {business.regNo}</span>
+        </p>
+      )
+    }
     <p class="ft__copy">
       © 도안자이 센텀리체 분양 상담. 본 페이지의 콘텐츠 권리는 각 권리자에게
       있습니다.
@@ -80,6 +89,13 @@ const telDigits = agent.phone.replace(/[^0-9+]/g, "");
   }
   .ft__notice strong {
     color: rgba(255, 255, 255, 0.85);
+  }
+  .ft__notice .ft__biz {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 14px;
+    color: rgba(255, 255, 255, 0.6);
   }
   .ft__copy {
     margin-top: 14px;
